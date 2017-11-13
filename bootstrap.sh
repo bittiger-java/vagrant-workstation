@@ -145,18 +145,38 @@ sudo true
 sudo apt-get -y install linux-image-extra-$(uname -r)
 
 # Add Docker PPA and install latest version
+# Old docker installation
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
 sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
 sudo apt-get update
 sudo apt-get install lxc-docker -y
 
+#New Docker installation https://askubuntu.com/questions/472412/how-do-i-upgrade-docker
+# add the new gpg key
+#sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+# add new repo
+#sudo add-apt-repository \
+#  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+#  $(lsb_release -cs) \
+#  stable"
+#sudo apt-get update
+# remove the old
+#sudo apt-get purge lxc-docker*
+
+# Install new docker engine
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-trusty main'
+#sudo apt-get update
+#sudo apt-get install docker-ce=17.09.0~ce-0~ubuntu -y
+
+
 echo 'Add docker group'
 sudo usermod -aG docker vagrant
 
 # Install docker-compose
-sudo sh -c "curl -L https://github.com/docker/compose/releases/download/1.3.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
+sudo sh -c "curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
 sudo chmod +x /usr/local/bin/docker-compose
-sudo sh -c "curl -L https://raw.githubusercontent.com/docker/compose/1.3.3/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose"
+sudo sh -c "curl -L https://raw.githubusercontent.com/docker/compose/1.17.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose"
 
 # Install docker-cleanup command
 cd /tmp
@@ -182,10 +202,6 @@ rm /tmp/chefdk*.deb
 echo 'Install PIP'
 sudo apt-get -f install python-pip -y
 
-#Install Flask Excel
-#echo 'Install Flask Excel'
-#pip install Flask-Excel
-#pip install pyexcel-xlsx
 
 # Change ownership
 sudo chown -hR vagrant:vagrant ~/Development
